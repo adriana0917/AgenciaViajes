@@ -5,6 +5,9 @@
  */
 package formularios;
 
+import conexion.Conexion;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import modelo.Pais;
 import modelo.Paquete;
@@ -21,6 +24,11 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
     int perSeleccion = 0;
     public FrmPaquete() {
         initComponents();
+        cargarDatos();
+        CargarPais();
+        CargarHotel();
+        CargarAerolinea();
+        
     }
 
     /**
@@ -53,6 +61,9 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
         btnLimpiar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(0, 51, 51));
+        setClosable(true);
+
         tablaPaquete.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -73,18 +84,23 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(tablaPaquete);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("MANTENIMIENTO PAQUETES");
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Precio");
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("País");
 
         jLabel3.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Descripción");
 
         jLabel4.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("Número De Días");
 
         txtDescripcion.setColumns(20);
@@ -92,25 +108,37 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
         jScrollPane2.setViewportView(txtDescripcion);
 
         txtPrecio.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0.00"))));
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         txtNumDias.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        txtNumDias.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNumDiasKeyTyped(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Hotel");
         jLabel6.setToolTipText("");
 
         jLabel7.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Aerolínea");
         jLabel7.setToolTipText("");
 
-        btnInsertar.setText("Ingresar");
+        btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btninsert.png"))); // NOI18N
         btnInsertar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnInsertarMouseClicked(evt);
             }
         });
 
-        btnEditar.setText("Editar");
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEdit.png"))); // NOI18N
         btnEditar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnEditarMouseClicked(evt);
@@ -122,14 +150,14 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
             }
         });
 
-        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnclean.png"))); // NOI18N
         btnLimpiar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnLimpiarMouseClicked(evt);
             }
         });
 
-        btnEliminar.setText("Eliminar");
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnDelete.png"))); // NOI18N
         btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnEliminarMouseClicked(evt);
@@ -158,9 +186,10 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel6)
                                     .addGap(82, 82, 82)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addGap(82, 82, 82))
-                            .addComponent(jLabel1))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel1))
+                                .addGap(82, 82, 82)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -168,12 +197,13 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel4)
                                 .addGap(20, 20, 20)
                                 .addComponent(txtNumDias, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cbAerolinea, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane2)
-                            .addComponent(cbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbPais, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbAerolinea, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbHotel, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbPais, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(70, 70, 70))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
@@ -187,7 +217,7 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnEliminar)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -217,7 +247,7 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
                     .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNumDias, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnEditar)
@@ -225,37 +255,53 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
                     .addComponent(btnEliminar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnInsertarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertarMouseClicked
-//        Paquete p = new Paquete();
-//        p.setDescripcion(txtDescripcion.getText());
-//        p.setCodPais(Integer.parseInt(cbPais.toString()));
-//        p.setPrecio(Double.parseDouble(txtPrecio.getText()));
-//        p.setNumDias(Integer.parseInt(txtNumDias.getText()));
-//        p.setCodHotel(Integer.parseInt(cbHotel.toString()));
-//        p.setCodAerolinea(Integer.parseInt(cbAerolinea.toString()));
-//        p.insertarPaquete(p);
-//        limpiar();
-//        cargarDatos();
+        Paquete p = new Paquete();
+        p.setDescripcion(txtDescripcion.getText());
+        //p.setCodPais(); = String.valueOf(cbPais.getSelectedItem());
+        //p.setCodPais(cbPais.getSelectedIndex());
+        //p.setCodPais(cbPais.getSelectedIndex());
+        p.setCodPais(Integer.parseInt(cbPais.getSelectedItem().toString()));
+        p.setPrecio(Double.parseDouble(txtPrecio.getText()));
+        p.setNumDias(Integer.parseInt(txtNumDias.getText()));
+        //p.setCodHotel(cbHotel.getSelectedIndex());
+        p.setCodHotel(Integer.parseInt(cbHotel.getSelectedItem().toString()));
+        //p.setCodAerolinea(cbAerolinea.getSelectedIndex());
+        p.setCodAerolinea(Integer.parseInt(cbAerolinea.getSelectedItem().toString()));
+        p.insertarPaquete(p);
+        limpiar();
+        cargarDatos();
+        CargarAerolinea();
+        CargarPais();
+        CargarHotel();
     }//GEN-LAST:event_btnInsertarMouseClicked
 
     private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
-//        Paquete p = new Paquete();
-//        p.setNombre(txtNombre.getText());
-//        p.setCodPais(perSeleccion);
-//        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de Editar este Pais", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
-//        if (dialogResult == JOptionPane.YES_OPTION) {
-//            p.editarPais(p);
-//            limpiar();
-//            cargarDatos();
-//        } else {
-//            limpiar();
-//        }
+        Paquete p = new Paquete();
+        p.setDescripcion(txtDescripcion.getText());
+        p.setCodPais(Integer.parseInt(cbPais.getSelectedItem().toString()));
+        p.setPrecio(Double.parseDouble(txtPrecio.getText()));
+        p.setNumDias(Integer.parseInt(txtNumDias.getText()));
+        p.setCodHotel(Integer.parseInt(cbHotel.getSelectedItem().toString()));
+        p.setCodAerolinea(Integer.parseInt(cbAerolinea.getSelectedItem().toString()));
+        p.setCodPaquete(perSeleccion);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de Editar este Pais", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            p.editarPaquete(p);
+            limpiar();
+            cargarDatos();
+            CargarAerolinea();
+            CargarHotel();
+            CargarPais();
+        } else {
+            limpiar();
+        }
     }//GEN-LAST:event_btnEditarMouseClicked
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -263,19 +309,22 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnLimpiarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLimpiarMouseClicked
-        //limpiar();
+        limpiar();
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
     private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-//        Pais p = new Pais();
-//        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar este pais", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
-//        if (dialogResult == JOptionPane.YES_OPTION) {
-//            p.eliminarPais(perSeleccion);
-//            limpiar();
-//            cargarDatos();
-//        } else {
-//            limpiar();
-//        }
+        Paquete paq = new Paquete();
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar este paquete", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            paq.eliminarPaquete(perSeleccion);
+            limpiar();
+            cargarDatos();
+            CargarAerolinea();
+            CargarHotel();
+            CargarPais();
+        } else {
+            limpiar();
+        }
     }//GEN-LAST:event_btnEliminarMouseClicked
     
     private void limpiar() {
@@ -305,7 +354,59 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
             Fila[6] = pqu.getCodAerolinea();            
             modelo.addRow(Fila);
         }
-        tablaPaquete.setModel(modelo);
+        tablaPaquete.setModel(modelo);        
+        
+    }
+    
+    public void CargarPais() {
+        try
+        {
+        Conexion cone = new Conexion();
+                String sql = "select * from tb_pais";
+                ResultSet rs = cone.consultar(sql);
+            while(rs.next()){                            
+                cbPais.addItem(rs.getString(1));
+            }
+            cone.desconectar();
+            }
+        catch(Exception e)
+        {
+            System.out.println("Error"+e);
+        }    
+    }
+    
+    public void CargarHotel() {
+        try
+        {
+        Conexion cone = new Conexion();
+                String sql = "select * from tb_hotel";
+                ResultSet rs = cone.consultar(sql);
+            while(rs.next()){                            
+                cbHotel.addItem(rs.getString(1));
+            }
+            cone.desconectar();
+            }
+        catch(Exception e)
+        {
+            System.out.println("Error"+e);
+        }    
+    }
+    
+    public void CargarAerolinea() {
+        try
+        {
+        Conexion cone = new Conexion();
+                String sql = "select * from tb_aerolinea";
+                ResultSet rs = cone.consultar(sql);
+            while(rs.next()){                            
+                cbAerolinea.addItem(rs.getString(1));
+            }
+            cone.desconectar();
+            }
+        catch(Exception e)
+        {
+            System.out.println("Error"+e);
+        }    
     }
     
     private void tablaPaqueteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPaqueteMouseClicked
@@ -318,6 +419,20 @@ public class FrmPaquete extends javax.swing.JInternalFrame {
         perSeleccion = Integer.parseInt(tablaPaquete.getValueAt(tablaPaquete.getSelectedRow(), 0).toString());
     
     }//GEN-LAST:event_tablaPaqueteMouseClicked
+
+    private void txtNumDiasKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNumDiasKeyTyped
+        if(!Character.isDigit(evt.getKeyChar()))
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtNumDiasKeyTyped
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        if(!Character.isDigit(evt.getKeyChar()))
+        {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -4,23 +4,26 @@
  * and open the template in the editor.
  */
 package formularios;
-import modelo.*;
-import javax.swing.*;
+
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Hotel;
+
 /**
  *
  * @author Adriana
  */
-public class FrmPais extends javax.swing.JInternalFrame {
+public class FrmHotel extends javax.swing.JInternalFrame {
 
     /**
-     * Creates new form FrmPais
+     * Creates new form FrmHotel
      */
     int perSeleccion = 0;
-    public FrmPais() {
+    public FrmHotel() {
         initComponents();
         cargarDatos();
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,40 +36,36 @@ public class FrmPais extends javax.swing.JInternalFrame {
 
         jLabel5 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JFormattedTextField();
         btnInsertar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
-        btnEliminar = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tablaPais = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaHotel = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(0, 51, 51));
         setClosable(true);
 
         jLabel5.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("MANTENIMIENTO PAIS");
+        jLabel5.setText("MANTENIMIENTO HOTEL");
 
         jLabel1.setFont(new java.awt.Font("Arial", 1, 12)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Nombre");
 
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtNombreKeyTyped(evt);
-            }
-        });
-
         btnInsertar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btninsert.png"))); // NOI18N
         btnInsertar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnInsertarMouseClicked(evt);
+            }
+        });
+
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnDelete.png"))); // NOI18N
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEliminarMouseClicked(evt);
             }
         });
 
@@ -89,14 +88,7 @@ public class FrmPais extends javax.swing.JInternalFrame {
             }
         });
 
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnDelete.png"))); // NOI18N
-        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnEliminarMouseClicked(evt);
-            }
-        });
-
-        tablaPais.setModel(new javax.swing.table.DefaultTableModel(
+        tablaHotel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
                 {null, null},
@@ -104,87 +96,102 @@ public class FrmPais extends javax.swing.JInternalFrame {
                 {null, null}
             },
             new String [] {
-                "Código País", "Nombre País"
+                "Código Hotel", "Nombre Hotel"
             }
-        ));
-        tablaPais.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaPaisMouseClicked(evt);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jScrollPane3.setViewportView(tablaPais);
+        tablaHotel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaHotelMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tablaHotel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 423, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(59, 59, 59)
+                                .addComponent(jLabel5))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(btnInsertar, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(32, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(156, 156, 156))
+                                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(21, 21, 21)
                 .addComponent(jLabel5)
-                .addGap(38, 38, 38)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnLimpiar)
                     .addComponent(btnEditar)
                     .addComponent(btnInsertar)
                     .addComponent(btnEliminar))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-
-    }//GEN-LAST:event_txtNombreActionPerformed
-
     private void btnInsertarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnInsertarMouseClicked
-        Pais p = new Pais();
-        p.setNombre(txtNombre.getText());
-        p.insertarPais(p);
+        Hotel h = new Hotel();
+        h.setNombre(txtNombre.getText());
+        h.insertarHotel(h);
         limpiar();
         cargarDatos();
     }//GEN-LAST:event_btnInsertarMouseClicked
 
-    private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
-        Pais p = new Pais();
-        p.setNombre(txtNombre.getText());
-        p.setCodPais(perSeleccion);
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de Editar este Pais", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
+    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
+        Hotel h = new Hotel();
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar este Hotel", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            p.editarPais(p);
+            h.eliminarHotel(perSeleccion);
+            limpiar();
+            cargarDatos();
+        } else {
+            limpiar();
+        }
+    }//GEN-LAST:event_btnEliminarMouseClicked
+
+    private void btnEditarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditarMouseClicked
+        Hotel h = new Hotel();
+        h.setNombre(txtNombre.getText());
+        h.setCodHotel(perSeleccion);
+        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de Editar este Hotel", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            h.editarHotel(h);
             limpiar();
             cargarDatos();
         } else {
@@ -200,49 +207,30 @@ public class FrmPais extends javax.swing.JInternalFrame {
         limpiar();
     }//GEN-LAST:event_btnLimpiarMouseClicked
 
+    private void tablaHotelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaHotelMouseClicked
+        txtNombre.setText(tablaHotel.getValueAt(tablaHotel.getSelectedRow(), 1).toString());
+        perSeleccion = Integer.parseInt(tablaHotel.getValueAt(tablaHotel.getSelectedRow(), 0).toString());
+    }//GEN-LAST:event_tablaHotelMouseClicked
+
     private void limpiar() {
         txtNombre.setText("");       
         perSeleccion = 0;
     }
     
     public void cargarDatos() {
-        DefaultTableModel modelo = (DefaultTableModel) tablaPais.getModel();
+        DefaultTableModel modelo = (DefaultTableModel) tablaHotel.getModel();
         while (modelo.getRowCount() > 0) {
             modelo.removeRow(0);
         }
-        Object Fila[] = new Object[tablaPais.getColumnCount()];
-        Pais p = new Pais();
-        for (Pais c : p.mostrarPais()) {
-            Fila[0] = c.getCodPais();
+        Object Fila[] = new Object[tablaHotel.getColumnCount()];
+        Hotel h = new Hotel();
+        for (Hotel c : h.mostrarHotel()) {
+            Fila[0] = c.getCodHotel();
             Fila[1] = c.getNombre();           
             modelo.addRow(Fila);
         }
-        tablaPais.setModel(modelo);
-    }
-    
-    private void btnEliminarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEliminarMouseClicked
-        Pais p = new Pais();
-        int dialogResult = JOptionPane.showConfirmDialog(null, "Esta seguro de eliminar este pais", "Agencia de Viajes", JOptionPane.YES_NO_OPTION);
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            p.eliminarPais(perSeleccion);
-            limpiar();
-            cargarDatos();
-        } else {
-            limpiar();
-        }
-    }//GEN-LAST:event_btnEliminarMouseClicked
-
-    private void tablaPaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPaisMouseClicked
-        txtNombre.setText(tablaPais.getValueAt(tablaPais.getSelectedRow(), 1).toString());
-        perSeleccion = Integer.parseInt(tablaPais.getValueAt(tablaPais.getSelectedRow(), 0).toString());
-    }//GEN-LAST:event_tablaPaisMouseClicked
-
-    private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
-       if(!Character.isLetter(evt.getKeyChar()))
-        {
-            evt.consume();
-        }
-    }//GEN-LAST:event_txtNombreKeyTyped
+        tablaHotel.setModel(modelo);
+    }                                  
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -252,8 +240,8 @@ public class FrmPais extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable tablaPais;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tablaHotel;
+    private javax.swing.JFormattedTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

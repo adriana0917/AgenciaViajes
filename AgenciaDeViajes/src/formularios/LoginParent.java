@@ -16,6 +16,7 @@ public class LoginParent extends javax.swing.JFrame {
      */
     public LoginParent() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -35,9 +36,14 @@ public class LoginParent extends javax.swing.JFrame {
         MHoteles = new javax.swing.JMenuItem();
         MPais = new javax.swing.JMenuItem();
         MPaquetes = new javax.swing.JMenuItem();
+        MReserva = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 153, 102));
+
+        desktopPane.setBackground(new java.awt.Color(0, 51, 51));
+        desktopPane.setForeground(new java.awt.Color(0, 51, 51));
 
         MantenimientosMenu.setMnemonic('f');
         MantenimientosMenu.setText("Mantenimientos");
@@ -55,11 +61,21 @@ public class LoginParent extends javax.swing.JFrame {
         MClientes.setMnemonic('s');
         MClientes.setText("Clientes");
         MClientes.setActionCommand("");
+        MClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MClientesActionPerformed(evt);
+            }
+        });
         MantenimientosMenu.add(MClientes);
 
         MHoteles.setMnemonic('a');
         MHoteles.setText("Hoteles");
         MHoteles.setActionCommand("");
+        MHoteles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MHotelesActionPerformed(evt);
+            }
+        });
         MantenimientosMenu.add(MHoteles);
 
         MPais.setText("Pais");
@@ -77,6 +93,14 @@ public class LoginParent extends javax.swing.JFrame {
             }
         });
         MantenimientosMenu.add(MPaquetes);
+
+        MReserva.setText("Reservación");
+        MReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MReservaActionPerformed(evt);
+            }
+        });
+        MantenimientosMenu.add(MReserva);
 
         menuBar.add(MantenimientosMenu);
 
@@ -123,6 +147,24 @@ public class LoginParent extends javax.swing.JFrame {
         h.show();
     }//GEN-LAST:event_MPaquetesActionPerformed
 
+    private void MHotelesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MHotelesActionPerformed
+        FrmHotel h = new FrmHotel();
+        this.desktopPane.add(h);
+        h.show();
+    }//GEN-LAST:event_MHotelesActionPerformed
+
+    private void MClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MClientesActionPerformed
+        FrmCliente h = new FrmCliente();
+        this.desktopPane.add(h);
+        h.show();
+    }//GEN-LAST:event_MClientesActionPerformed
+
+    private void MReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MReservaActionPerformed
+        FrmReserva h = new FrmReserva();
+        this.desktopPane.add(h);
+        h.show();
+    }//GEN-LAST:event_MReservaActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -164,6 +206,7 @@ public class LoginParent extends javax.swing.JFrame {
     private javax.swing.JMenuItem MHoteles;
     private javax.swing.JMenuItem MPais;
     private javax.swing.JMenuItem MPaquetes;
+    private javax.swing.JMenuItem MReserva;
     private javax.swing.JMenu MantenimientosMenu;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenu helpMenu;

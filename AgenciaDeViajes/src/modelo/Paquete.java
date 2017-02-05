@@ -114,9 +114,8 @@ public class Paquete {
     }
     
     public boolean editarPaquete(Paquete pqu) {
-            Conexion cone = new Conexion();
-            String sql = "update tb_paquete set descripcion = '"+ pqu.getDescripcion()+"',"
-                    + "codPais ="+pqu.getCodPais()+",precio="+pqu.getPrecio()+ ",numDias="+pqu.getNumDias()+",codHotel="+pqu.getCodHotel()+",codAerolinea="+pqu.getCodAerolinea()+""+ "where codPaquete ="+pqu.getCodPaquete();
+            Conexion cone = new Conexion();            
+            String sql = "update tb_paquete set descripcion = '"+ pqu.getDescripcion()+"',codPais ="+pqu.getCodPais()+",precio="+pqu.getPrecio()+",numDias="+pqu.getNumDias()+",codHotel="+pqu.getCodHotel()+",codAerolinea="+pqu.getCodAerolinea()+" where codPaquete ="+pqu.getCodPaquete();
             return cone.ejecutar(sql);
     }
     
